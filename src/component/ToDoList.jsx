@@ -46,7 +46,7 @@ export default function ToDoList(){
         </form>
 
         {sendList.map((list) =>(
-          <DetailList key={list.id} detail = {list}/>
+          <DetailList key={list.id} detail = {list} allList = {sendList} setAllList = {setSendList}/>
         ))}
     </div>
   )
