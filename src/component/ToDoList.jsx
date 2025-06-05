@@ -1,5 +1,7 @@
 import { useState } from "react";
 import DetailList from "./DetailList"
+import axios from "axios";
+import { object } from "yup";
 
 export default function ToDoList(){
   const[list, setList] = useState("");
@@ -16,13 +18,26 @@ export default function ToDoList(){
 
   }
 
-  function handleSubmit(e){
+  async function handleSubmit(e){
     e.preventDefault()
-    setSendList([...sendList, list])
-    setList("")
+    const data = {
+      "taskName" : list,
+      "userId" : 34
+    }
+    try{
+      const res = await axios.post("http://cc20-todo-midterm-env.eba-fi9p2pds.ap-southeast-1.elasticbeanstalk.com/api/V1/todos", data)
+      console.log(res.data)
+      console.log(sendList)
+      setSendList([...sendList, res.data.todo])
+      setList("")
+
+    }catch(err){
+      console.log(err)
+    }
+
 
   }
-
+// console.log(sendList, 'dlkjjpojpn')
   return(
     <div className="flex flex-col" onKeyDown={handleKeyDown}>
       <h1 className="my-5 text-4xl text-white">My Todo</h1>
@@ -31,7 +46,7 @@ export default function ToDoList(){
         </form>
 
         {sendList.map((list) =>(
-          <DetailList detail = {list}/>
+          <DetailList key={list.id} detail = {list}/>
         ))}
     </div>
   )
